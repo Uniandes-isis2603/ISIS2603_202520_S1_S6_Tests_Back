@@ -53,7 +53,7 @@ pipeline {
       stage('Unit Tests') {
          // Run unit tests
          options {
-            timeout(time: 2, unit: 'MINUTES')
+            timeout(time: 1, unit: 'MINUTES')
          }
          steps {
             script {
@@ -66,10 +66,48 @@ pipeline {
             }
          }
       }
+      stage('Integration Tests - Experimental') {
+            steps {
+               script {
+                  CURRENT_STAGE = 'Integration Tests - Experimental'
+                  // Find all Postman collections dynamically
+                  def collectionFiles = sh(script: "ls src/test/resources/postman/*.postman_collection.json", returnStdout: true).trim().split("\\r?\\n")
+
+                  if (collectionFiles.isEmpty()) {
+                     error "No Postman collections found in src/test/resources/postman/"
+                  }
+
+                  // Create results directory
+                  sh 'mkdir -p results'
+
+                  def basePort = 8081
+
+                  collectionFiles.eachWithIndex { file, idx ->
+                     def name = file.tokenize('/').last().replace('.postman_collection.json', '')
+                     def port = basePort + idx
+
+                     echo "🚀 Starting app instance for ${name} on port ${port}"
+                     sh "nohup java -jar target/*.jar --server.port=${port} > app-${name}.log 2>&1 &"
+                     sleep 10
+
+                     echo "🧪 Running Newman collection: ${file}"
+                     sh """
+                           newman run ${file} \
+                              --reporters cli,junit \
+                              --reporter-junit-export results/${name}-report.xml
+                     """
+
+                     echo "🧹 Stopping instance for ${name}"
+                     sh "pkill -f 'server.port=${port}' || true"
+                     sleep 5
+               }
+            }
+         }
+      }
       stage('Integration Tests') {
          // Run integration tests
          options {
-            timeout(time: 2, unit: 'MINUTES')
+            timeout(time: 1, unit: 'MINUTES')
          }
          steps {
             script {
