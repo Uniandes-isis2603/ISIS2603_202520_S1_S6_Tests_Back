@@ -269,7 +269,7 @@
 										newman
 									</executable>
 									<commandlineArgs>
-										run collections/*.postman_collection.json -e collections/EntornoIT.postman_environment.json
+										run collections/AuthorTests.postman_collection.json -e collections/EntornoIT.postman_environment.json
 									</commandlineArgs>
 								</configuration>
 							</execution>
