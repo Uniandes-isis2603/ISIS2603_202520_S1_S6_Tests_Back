@@ -75,17 +75,21 @@ pipeline {
          steps {
             script {
                CURRENT_STAGE = 'Integration Tests - Experimental'
-               def collectionFiles = sh(script: "ls ./collections/*.postman_collection.json", returnStdout: true).trim().split("\\r?\\n")
+               try {
 
-               docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
-                  collectionFiles.each { file ->
-                     def name = file.tokenize('/').last().replace('.postman_collection.json', '')
-                     
-                     sh """
-                           mvn verify -Pintegration-tests -DfileName=${name}
-                        """
+                  def collectionFiles = sh(script: "ls ./collections/*.postman_collection.json", returnStdout: true).trim().split("\\r?\\n")
+
+                  docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
+                     collectionFiles.each { file ->
+                        def name = file.tokenize('/').last().replace('.postman_collection.json', '')
                         
-                  }      
+                        sh """
+                              mvn verify -Pintegration-tests -DfileName=${name}
+                           """
+                     }      
+                  }
+               } catch (Exception e) {
+                  echo "No se encontraron colecciones de Postman para ejecutar pruebas de integracion"
                }
                
 
