@@ -138,9 +138,9 @@ pipeline {
                   collectionFiles.each { file ->
                      def name = file.tokenize('/').last().replace('.postman_collection.json', '')
                      echo "Running integration test for collection: ${name}"
-                     sh '''
+                     sh """
                         mvn verify -Pintegration-tests-2 -DfileName=${name}
-                     '''
+                     """
                   }
                      
                }               
