@@ -71,6 +71,9 @@ pipeline {
                script {
                   CURRENT_STAGE = 'Integration Tests - Experimental'
                   // Find all Postman collections dynamically
+                  def a = sh "ls -l"
+                  echo "Files in workspace:\n${a}"
+                  
                   def collectionFiles = sh(script: "ls src/test/resources/postman/*.postman_collection.json", returnStdout: true).trim().split("\\r?\\n")
 
                   if (collectionFiles.isEmpty()) {
