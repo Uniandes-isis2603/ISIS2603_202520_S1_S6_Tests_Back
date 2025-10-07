@@ -76,7 +76,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.1</version>
+				<version>3.2.5</version>
 				<configuration>
 					<useModulePath>false</useModulePath>
 				</configuration>
@@ -142,34 +142,27 @@
 					<plugin>
 						<groupId>org.springframework.boot</groupId>
 						<artifactId>spring-boot-maven-plugin</artifactId>
-						<configuration>
-							<profiles>
-								<profile>integration-tests</profile>
-							</profiles>
-							<arguments>
-								<argument>--server.port=8999</argument>
-							</arguments>
-							<excludes>
-								<exclude>
-									<groupId>org.projectlombok</groupId>
-									<artifactId>lombok</artifactId>
-								</exclude>
-							</excludes>
-						</configuration>
 						<executions>
-						<execution>
-							<id>pre-integration-test</id>
-							<goals>
-								<goal>start</goal>
-							</goals>
-						</execution>
-						<execution>
-							<id>post-integration-test</id>
-							<goals>
-								<goal>stop</goal>
-							</goals>
-						</execution>
-					</executions>
+							<execution>
+								<id>pre-it-start</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>start</goal>
+								</goals>
+								<configuration>
+									<arguments>
+										<argument>--server.port=8999</argument>
+									</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>post-it-stop</id>
+								<phase>post-integration-test</phase>
+								<goals>
+									<goal>stop</goal>
+								</goals>
+							</execution>
+						</executions>
 					</plugin>
 
 					<plugin>
@@ -213,15 +206,17 @@
 							</execution>
 
 							<execution>
-								<id>run-newman</id>
+								<id>integration-tests-composed-collection</id>
 								<phase>integration-test</phase>
 								<goals>
 									<goal>exec</goal>
 								</goals>
 								<configuration>
-									<executable>newman</executable>
+									<executable>
+										newman
+									</executable>
 									<commandlineArgs>
-										run it/composed.collection.json -e it/bookstore-back.postman_environment.json
+										run it/composed.collection.json -e collections/EntornoIT.postman_environment.json
 									</commandlineArgs>
 								</configuration>
 							</execution>
