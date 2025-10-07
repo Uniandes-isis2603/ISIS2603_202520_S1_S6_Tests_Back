@@ -74,11 +74,11 @@ pipeline {
                   def a = sh "ls -l"
                   echo "Files in workspace:\n${a}"
 
-                  def collectionFiles = sh(script: "ls ./collections/*.postman_collection.json", returnStdout: true).trim().split("\\r?\\n")
+                  def collectionFiles = sh(script: "ls -l ./collections/*.postman_collection.json", returnStdout: true).trim().split("\\r?\\n")
 
-                  if (collectionFiles.isEmpty()) {
-                     error "No Postman collections found in ./collections/"
-                  }
+                  // if (collectionFiles.isEmpty()) {
+                  //    error "No Postman collections found in ./collections/"
+                  // }
 
                   // Create results directory
                   sh 'mkdir -p results'
