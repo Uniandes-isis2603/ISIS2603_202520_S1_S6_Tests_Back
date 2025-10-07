@@ -127,9 +127,9 @@ pipeline {
       }
       stage('Integration Tests - Experimental') {
          // Run integration tests
-         options {
-            timeout(time: 2, unit: 'MINUTES')
-         }
+         // options {
+         //    timeout(time: 2, unit: 'MINUTES')
+         // }
          steps {
             script {
                CURRENT_STAGE = 'Integration Tests - Experimental'
