@@ -66,45 +66,61 @@ pipeline {
             }
          }
       }
+      // stage('Integration Tests - Experimental') {
+      //       steps {
+      //          script {
+      //             CURRENT_STAGE = 'Integration Tests - Experimental'
+      //             // Find all Postman collections dynamically
+      //             def a = sh "ls -l"
+      //             echo "Files in workspace:\n${a}"
+
+      //             def collectionFiles = sh(script: "ls ./collections/*.postman_collection.json", returnStdout: true).trim().split("\\r?\\n")
+
+      //             // if (collectionFiles.isEmpty()) {
+      //             //    error "No Postman collections found in ./collections/"
+      //             // }
+
+      //             // Create results directory
+      //             sh 'mkdir -p results'
+
+      //             sh 'npm install -g newman'
+
+      //             def basePort = 8999
+
+      //             collectionFiles.eachWithIndex { file, idx ->
+      //                def name = file.tokenize('/').last().replace('.postman_collection.json', '')
+      //                def port = basePort + idx
+
+      //                echo "🚀 Starting app instance for ${name} on port ${port}"
+      //                sh "nohup java -jar target/*.jar --server.port=${port} > app-${name}.log 2>&1 &"
+      //                sleep 10
+
+      //                echo "🧪 Running Newman collection: ${file}"
+      //                sh """
+      //                      newman run ${file} \
+      //                         --reporters cli,junit \
+      //                         --reporter-junit-export results/${name}-report.xml
+      //                """
+
+      //                echo "🧹 Stopping instance for ${name}"
+      //                sh "pkill -f 'server.port=${port}' || true"
+      //                sleep 5
+      //          }
+      //       }
+      //    }
+      // }
       stage('Integration Tests - Experimental') {
-            steps {
-               script {
-                  CURRENT_STAGE = 'Integration Tests - Experimental'
-                  // Find all Postman collections dynamically
-                  def a = sh "ls -l"
-                  echo "Files in workspace:\n${a}"
-
-                  def collectionFiles = sh(script: "ls ./collections/*.postman_collection.json", returnStdout: true).trim().split("\\r?\\n")
-
-                  // if (collectionFiles.isEmpty()) {
-                  //    error "No Postman collections found in ./collections/"
-                  // }
-
-                  // Create results directory
-                  sh 'mkdir -p results'
-
-                  sh 'npm install -g newman'
-
-                  def basePort = 8999
-
-                  collectionFiles.eachWithIndex { file, idx ->
-                     def name = file.tokenize('/').last().replace('.postman_collection.json', '')
-                     def port = basePort + idx
-
-                     echo "🚀 Starting app instance for ${name} on port ${port}"
-                     sh "nohup java -jar target/*.jar --server.port=${port} > app-${name}.log 2>&1 &"
-                     sleep 10
-
-                     echo "🧪 Running Newman collection: ${file}"
-                     sh """
-                           newman run ${file} \
-                              --reporters cli,junit \
-                              --reporter-junit-export results/${name}-report.xml
-                     """
-
-                     echo "🧹 Stopping instance for ${name}"
-                     sh "pkill -f 'server.port=${port}' || true"
-                     sleep 5
+         // Run integration tests
+         options {
+            timeout(time: 1, unit: 'MINUTES')
+         }
+         steps {
+            script {
+               CURRENT_STAGE = 'Integration Tests - Experimental'
+               docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
+                  sh '''
+                     mvn verify -Pintegration-tests-2
+                  '''
                }
             }
          }

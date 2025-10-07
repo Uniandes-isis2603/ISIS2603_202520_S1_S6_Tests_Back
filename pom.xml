@@ -133,6 +133,52 @@
 		</profile>
 
 		<profile>
+			<id>integration-tests-2</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>run-newman-tests</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>bash</executable>
+									<arguments>
+										<argument>-c</argument>
+										<argument>
+											<![CDATA[
+											mkdir -p results;
+											base_port=899;
+											for file in collections/*.postman_collection.json; do
+												name=$(basename "$file" .postman_collection.json);
+												port=$((base_port++));
+												echo "🚀 Starting instance for $name on port $port";
+												nohup java -jar target/*.jar --server.port=$port > "app-$name.log" 2>&1 &;
+												sleep 10;
+												echo "🧪 Running Newman on $file";
+												npx newman run "$file" --reporters cli,junit --reporter-junit-export "results/$name-report.xml";
+												echo "🧹 Stopping instance for $name";
+												pkill -f "server.port=$port" || true;
+												sleep 5;
+											done
+											]]>
+										</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
 			<id>integration-tests</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
