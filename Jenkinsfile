@@ -89,7 +89,7 @@ pipeline {
                      }      
                   }
                } catch (Exception e) {
-                  echo "No se encontraron colecciones de Postman para ejecutar pruebas de integracion"
+                  echo "Aún no hay colecciones de Postman para ejecutar pruebas de integración."
                }
                
 
