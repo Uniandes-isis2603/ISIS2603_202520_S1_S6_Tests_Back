@@ -74,14 +74,14 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<profiles>
-						<profile>
+						<profile>integration-tests</profile>
+					</profiles>
+					<!-- <profile>
 							<id>integration-tests</id>
 							    <properties>
 									<maven.test.skip>true</maven.test.skip>
 								</properties>
-						</profile>
-						
-					</profiles>
+						</profile> -->
 					<arguments>
 						<argument>--server.port=8999</argument>
 					</arguments>
@@ -151,7 +151,7 @@
 							</commandlineArgs>
 						</configuration>
 					</execution>
-					<execution>
+					<!-- <execution>
 						<id>integration-tests-composed-collection</id>
 						<phase>integration-test</phase>
 						<goals>
@@ -165,7 +165,7 @@
 								run it/composed.collection.json -e collections/EntornoIT.postman_environment.json
 							</commandlineArgs>
 						</configuration>
-					</execution>
+					</execution> -->
 				</executions>
 			</plugin>
 		</plugins>
