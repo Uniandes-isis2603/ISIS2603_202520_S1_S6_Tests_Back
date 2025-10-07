@@ -83,6 +83,8 @@ pipeline {
                   // Create results directory
                   sh 'mkdir -p results'
 
+                  sh 'npm install -g newman'
+
                   def basePort = 8999
 
                   collectionFiles.eachWithIndex { file, idx ->
