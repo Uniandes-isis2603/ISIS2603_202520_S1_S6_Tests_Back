@@ -44,7 +44,7 @@ pipeline {
                docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
                   sh '''
                      java -version
-                     mvn clean install -DskipTests -Dmaven.test.skip
+                     mvn clean install -DskipTests 
                   '''
                }
             }

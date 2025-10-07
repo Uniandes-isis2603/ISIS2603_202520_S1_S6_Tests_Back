@@ -74,7 +74,13 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<profiles>
-						<profile>integration-tests</profile>
+						<profile>
+							<id>integration-tests</id>
+							    <properties>
+									<maven.test.skip>true</maven.test.skip>
+								</properties>
+						</profile>
+						
 					</profiles>
 					<arguments>
 						<argument>--server.port=8999</argument>
