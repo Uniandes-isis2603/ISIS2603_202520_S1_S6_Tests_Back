@@ -134,16 +134,19 @@ pipeline {
             script {
                CURRENT_STAGE = 'Integration Tests - Experimental'
                def collectionFiles = sh(script: "ls ./collections/*.postman_collection.json", returnStdout: true).trim().split("\\r?\\n")
-               docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
-                  collectionFiles.each { file ->
+
+               collectionFiles.each { file ->
                      def name = file.tokenize('/').last().replace('.postman_collection.json', '')
                      echo "Running integration test for collection: ${name}"
-                     sh """
-                        mvn verify -Pintegration-tests-2 -DfileName=${name}
-                     """
-                  }
                      
-               }               
+                     docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
+                        sh """
+                              mvn verify -Pintegration-tests-2 -DfileName=${name}
+                           """
+                           
+                     }               
+                  }
+
             }
          }
       }
