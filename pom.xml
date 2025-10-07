@@ -164,10 +164,8 @@
 											for file in collections/*.postman_collection.json; do
 												name=$(basename "$file" .postman_collection.json);
 												port=$((base_port++));
-												echo "🚀 Starting instance for $name on port $port";
 												nohup java -jar target/*.jar --server.port=$port > "app-$name.log" 2>&1 &;
 												sleep 10;
-												echo "🧪 Running Newman on $file";
 												npx newman run "$file" --reporters cli,junit --reporter-junit-export "results/$name-report.xml";
 												echo "🧹 Stopping instance for $name";
 												pkill -f "server.port=$port" || true;
