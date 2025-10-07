@@ -1,10 +1,11 @@
 {
 	"info": {
-		"_postman_id": "e7bc6d6c-75cf-4261-9a37-95d63c07300f",
+		"_postman_id": "48501f19-e8f6-4584-a4db-50094308b74f",
 		"name": "BookAuthors Tests",
 		"description": "Colección de pruebas sobre el recurso BookAuthors",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25917437"
+		"_exporter_id": "5168628",
+		"_collection_link": "https://desarrollo-1063.postman.co/workspace/Tests~16638dc7-acf6-4ca4-810a-556278b7c4c2/collection/5168628-48501f19-e8f6-4584-a4db-50094308b74f?action=share&source=collection_link&creator=5168628"
 	},
 	"item": [
 		{
@@ -320,7 +321,9 @@
 							"});",
 							""
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
 					}
 				}
 			],
@@ -328,13 +331,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/books/{{author_id}}/authors/0",
+					"raw": "{{baseUrl}}/books/0/authors/0",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"books",
-						"{{author_id}}",
+						"0",
 						"authors",
 						"0"
 					]
