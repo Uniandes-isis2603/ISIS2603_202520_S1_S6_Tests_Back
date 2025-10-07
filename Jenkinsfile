@@ -80,7 +80,6 @@ pipeline {
                docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
                   collectionFiles.each { file ->
                      def name = file.tokenize('/').last().replace('.postman_collection.json', '')
-                     echo "Running integration test for collection: ${name}"
                      
                      sh """
                            mvn verify -Pintegration-tests -DfileName=${name}
