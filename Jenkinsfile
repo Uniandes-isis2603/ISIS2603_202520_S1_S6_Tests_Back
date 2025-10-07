@@ -60,28 +60,28 @@ pipeline {
                CURRENT_STAGE = 'Testing'
                docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
                   sh '''
-                     mvn test
+                     mvn verify -Punit-tests
                   '''
                }
             }
          }
       }
-      // stage('Integration Tests') {
-      //    // Run integration tests
-      //    options {
-      //       timeout(time: 2, unit: 'MINUTES')
-      //    }
-      //    steps {
-      //       script {
-      //          CURRENT_STAGE = 'Testing'
-      //          docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
-      //             sh '''
-      //                mvn verify -Pint-tests
-      //             '''
-      //          }
-      //       }
-      //    }
-      // }
+      stage('Integration Tests') {
+         // Run integration tests
+         options {
+            timeout(time: 2, unit: 'MINUTES')
+         }
+         steps {
+            script {
+               CURRENT_STAGE = 'Testing'
+               docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
+                  sh '''
+                     mvn verify -Pintegration-tests
+                  '''
+               }
+            }
+         }
+      }
       stage('Static Analysis') {
          // Run static analysis
          steps {
