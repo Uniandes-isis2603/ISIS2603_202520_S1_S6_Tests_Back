@@ -73,17 +73,17 @@ pipeline {
                   // Find all Postman collections dynamically
                   def a = sh "ls -l"
                   echo "Files in workspace:\n${a}"
-                  
-                  def collectionFiles = sh(script: "ls src/test/resources/postman/*.postman_collection.json", returnStdout: true).trim().split("\\r?\\n")
+
+                  def collectionFiles = sh(script: "ls ./collections/*.postman_collection.json", returnStdout: true).trim().split("\\r?\\n")
 
                   if (collectionFiles.isEmpty()) {
-                     error "No Postman collections found in src/test/resources/postman/"
+                     error "No Postman collections found in ./collections/"
                   }
 
                   // Create results directory
                   sh 'mkdir -p results'
 
-                  def basePort = 8081
+                  def basePort = 8999
 
                   collectionFiles.eachWithIndex { file, idx ->
                      def name = file.tokenize('/').last().replace('.postman_collection.json', '')
