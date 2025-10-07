@@ -109,22 +109,6 @@ pipeline {
       //       }
       //    }
       // }
-      stage('Integration Tests - Experimental') {
-         // Run integration tests
-         options {
-            timeout(time: 1, unit: 'MINUTES')
-         }
-         steps {
-            script {
-               CURRENT_STAGE = 'Integration Tests - Experimental'
-               docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
-                  sh '''
-                     mvn verify -Pintegration-tests-2
-                  '''
-               }
-            }
-         }
-      }
       stage('Integration Tests') {
          // Run integration tests
          options {
@@ -136,6 +120,22 @@ pipeline {
                docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
                   sh '''
                      mvn verify -Pintegration-tests
+                  '''
+               }
+            }
+         }
+      }
+      stage('Integration Tests - Experimental') {
+         // Run integration tests
+         options {
+            timeout(time: 1, unit: 'MINUTES')
+         }
+         steps {
+            script {
+               CURRENT_STAGE = 'Integration Tests - Experimental'
+               docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
+                  sh '''
+                     mvn verify -Pintegration-tests-2
                   '''
                }
             }
