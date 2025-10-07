@@ -57,7 +57,7 @@ pipeline {
          }
          steps {
             script {
-               CURRENT_STAGE = 'Testing'
+               CURRENT_STAGE = 'Unit Tests'
                docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
                   sh '''
                      mvn verify -Punit-tests
@@ -73,7 +73,7 @@ pipeline {
          }
          steps {
             script {
-               CURRENT_STAGE = 'Testing'
+               CURRENT_STAGE = 'Integration Tests'
                docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
                   sh '''
                      mvn verify -Pintegration-tests
