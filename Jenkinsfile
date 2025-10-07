@@ -50,7 +50,7 @@ pipeline {
             }
          }
       }
-      stage('Testing') {
+      stage('Unit Tests') {
          // Run unit tests
          options {
             timeout(time: 2, unit: 'MINUTES')
@@ -61,6 +61,22 @@ pipeline {
                docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
                   sh '''
                      mvn test
+                  '''
+               }
+            }
+         }
+      }
+      stage('Integration Tests') {
+         // Run integration tests
+         options {
+            timeout(time: 2, unit: 'MINUTES')
+         }
+         steps {
+            script {
+               CURRENT_STAGE = 'Testing'
+               docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
+                  sh '''
+                     mvn verify -P int-tests
                   '''
                }
             }
