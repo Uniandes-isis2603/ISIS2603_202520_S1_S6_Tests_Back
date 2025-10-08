@@ -74,7 +74,7 @@ pipeline {
          }
          steps {
             script {
-               CURRENT_STAGE = 'Integration Tests'
+               CURRENT_STAGE = 'Integration Tests - Experimental'
                try {
 
                   def collectionFiles = sh(script: "ls ./collections/*.postman_collection.json", returnStdout: true).trim().split("\\r?\\n")
@@ -82,6 +82,7 @@ pipeline {
                } catch (Exception e) {
                   echo "Aún no hay colecciones de Postman para ejecutar pruebas de integración."
                }
+
                def collectionFiles = sh(script: "ls ./collections/*.postman_collection.json", returnStdout: true).trim().split("\\r?\\n")
 
                docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
@@ -109,7 +110,21 @@ pipeline {
                }
             }
          }
-      }      
+      }
+      // stage('ARCC') {
+      //    // Run arcc analysis
+      //    steps {
+      //       script {
+      //          docker.image('arcc-tools-isis2603:latest').inside('-e ARCHID_TOKEN=${ARCHID_TOKEN}'){
+      //             sh '''
+      //                java -version
+      //                rsync --recursive . bookstore-back
+      //                java -cp /eclipse/plugins/org.eclipse.equinox.launcher_1.5.700.v20200207-2156.jar org.eclipse.equinox.launcher.Main -application co.edu.uniandes.archtoring.archtoring bookstore-back
+      //             '''
+      //          }
+      //       }
+      //    }
+      // }      
    }
    post {
       always {
