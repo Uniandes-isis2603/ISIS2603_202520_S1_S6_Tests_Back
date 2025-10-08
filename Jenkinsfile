@@ -89,7 +89,7 @@ pipeline {
                      def name = file.tokenize('/').last().replace('.postman_collection.json', '')
                      
                      sh """
-                           mvn verify -Pintegration-tests -DfileName='${name}'
+                           mvn verify -Pintegration-tests -DfileName=${name}
                         """
                   }      
                }
