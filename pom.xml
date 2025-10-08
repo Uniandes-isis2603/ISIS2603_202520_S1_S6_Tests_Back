@@ -221,7 +221,7 @@
 										newman
 									</executable>
 									<commandlineArgs>
-										run "collections/${fileName}.postman_collection.json" -e
+										run collections/${fileName}.postman_collection.json -e
 										collections/EntornoIT.postman_environment.json
 									</commandlineArgs>
 								</configuration>
